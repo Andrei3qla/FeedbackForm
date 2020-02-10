@@ -56,13 +56,13 @@
 
           <div class="recaptca-wrap">
             <p>
-            <re-captcha (resolved)="resolved($event)" siteKey="6Ld_KtcUAAAAAOQgrVYPNFTUl0uYyyYI8HJeXk13" formControlName="recaptcha"></re-captcha>
+            <re-captcha (resolved)="resolved($event)" siteKey={{sharedKey}} formControlName="recaptcha"></re-captcha>
           </p>
           </div>
 
 
           <div matTooltip="Необходимо заполнить все поля корректно" [matTooltipDisabled]="!isButtonDisabled()">
-            <button mat-raised-button type="submit" [disabled]="userData.invalid" (click)="press()">
+            <button mat-raised-button type="submit" [disabled]="userData.invalid||clicked" (click)="press()">
               Отправить
             </button>
           </div>

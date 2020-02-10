@@ -31,14 +31,29 @@ export class FormComponent {
 
   constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
     this.url = baseUrl;
+    this.sharedKey = "6Ld_KtcUAAAAAOQgrVYPNFTUl0uYyyYI8HJeXk13";
+    this.captchaURL = "https://www.google.com/recaptcha/api/siteverify";
   }
 
   posted: boolean = false;
+  clicked: boolean = false;
   url: string;
   retained: object;
+  sharedKey : string;
+  captchaURL : string;
 
   resolved(captchaResponse: string) {
-    console.log(`Resolved captcha with response: ${captchaResponse}`);
+
+    //console.log(`Resolved captcha with response: ${captchaResponse}`);
+    //const captchaRequest = {
+    //  secret: this.sharedKey,
+    //  response: captchaResponse
+    //}
+    //this.http.post(this.captchaURL, captchaRequest)
+    //  .subscribe((data) => {
+    //    console.log(data);
+    //  });
+
   }
 
   isButtonDisabled(): boolean {
@@ -46,6 +61,7 @@ export class FormComponent {
   }
 
   public press(): void {
+    this.clicked = true;
     const body = {
       id: 0,
       name: this.userData.get('name').value,
