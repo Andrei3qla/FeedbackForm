@@ -1,0 +1,89 @@
+
+<div class="wrap">
+
+  <div *ngIf="!posted; else elseBlock">
+    <mat-card class="card">
+      <mat-card-header>
+        <mat-card-title class="head-card">Напишите нам</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <form id="contactform" [formGroup]="userData">
+          <p>
+            <mat-form-field appearance="legacy" class="input-field">
+              <mat-label>Ваше имя</mat-label>
+              <input matInput placeholder="Andrew" name="firstName" type="text" formControlName="name">
+              <mat-icon matSuffix>mode_edit</mat-icon>
+            </mat-form-field>
+          </p>
+
+          <p>
+            <mat-form-field appearance="legacy" class="input-field">
+              <mat-label>Ваш email</mat-label>
+              <input matInput placeholder="yourmail@mail.com" type="email" formControlName="email">
+              <mat-hint>Должен иметь вид host@mail.com</mat-hint>
+              <mat-icon matSuffix>email</mat-icon>
+            </mat-form-field>
+          </p>
+
+          <p>
+            <mat-form-field appearance="legacy" class="input-field">
+              <mat-label>Ваш номер телефона</mat-label>
+              <input matInput prefix="+7" mask="(000)000-00-00" placeholder="+7(999)999-99-99" type="tel" formControlName="phone">
+              <mat-icon matSuffix>phone</mat-icon>
+            </mat-form-field>
+          </p>
+
+          <p>
+            <mat-form-field appearance="legacy" class="input-field">
+              <mat-label>Тема сообщения</mat-label>
+              <mat-select formControlName="subject">
+                <mat-option value="Техподдержка">Техподдержка</mat-option>
+                <mat-option value="Продажи">Продажи</mat-option>
+                <mat-option value="Другое">Другое</mat-option>
+
+              </mat-select>
+            </mat-form-field>
+          </p>
+
+          <p>
+            <mat-form-field appearance="legacy" class="input-field">
+              <mat-label>Текст сообщения</mat-label>
+              <textarea matInput placeholder="Введите текст сообщения" formControlName="message"></textarea>
+            </mat-form-field>
+          </p>
+
+
+          <div class="recaptca-wrap">
+            <p>
+            <re-captcha (resolved)="resolved($event)" siteKey="6Ld_KtcUAAAAAOQgrVYPNFTUl0uYyyYI8HJeXk13" formControlName="recaptcha"></re-captcha>
+          </p>
+          </div>
+
+
+          <div matTooltip="Необходимо заполнить все поля корректно" [matTooltipDisabled]="!isButtonDisabled()">
+            <button mat-raised-button type="submit" [disabled]="userData.invalid" (click)="press()">
+              Отправить
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <ng-template #elseBlock>
+    <mat-card class="card">
+      <mat-card-header>
+        <mat-card-title class="head-card">Полученые данные</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content >
+        <div class="retained" *ngFor="let item of retained | keyvalue">
+          Поле: <b>{{item.key}}</b> =  <b>{{item.value}}</b>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </ng-template>
+
+</div>
+

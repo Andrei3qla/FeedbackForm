@@ -1,0 +1,39 @@
+.card {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+  width: 350px;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, 0)
+}
+
+.retained{
+    text-align: left;
+}
+
+.recaptcha-wrap {
+  justify-content: center;
+}
+
+.head-card {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  display: normal;
+}
+.wrap {
+  padding-top: 50px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.input-field{
+    width: 100%;
+    border: 0px;
+}
+
+
+
