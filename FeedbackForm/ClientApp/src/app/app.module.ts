@@ -13,31 +13,33 @@ import { MatCardModule } from '@angular/material/card'
 import { MatFormFieldModule, MatInputModule, MatSelectModule, MatIconModule } from '@angular/material'
 import { MatTooltipModule } from '@angular/material/tooltip'
 
-import { RecaptchaModule, RecaptchaFormsModule, RecaptchaLoaderService, RECAPTCHA_SETTINGS, RecaptchaSettings } from 'ng-recaptcha';
+import { RecaptchaModule, RecaptchaFormsModule, RECAPTCHA_SETTINGS, RecaptchaSettings } from 'ng-recaptcha';
+import {MatButtonModule} from "@angular/material/button";
 
 @NgModule({
   declarations: [
     AppComponent,
     FormComponent
   ],
-  imports: [
-    BrowserModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    NgxMaskModule.forRoot({
-      showMaskTyped: true,
-    }),
-    BrowserAnimationsModule,
+    imports: [
+        BrowserModule,
+        ReactiveFormsModule,
+        HttpClientModule,
+        NgxMaskModule.forRoot({
+            showMaskTyped: true,
+        }),
+        BrowserAnimationsModule,
 
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatTooltipModule,
-    MatIconModule,
-    RecaptchaFormsModule,
-    RecaptchaModule
-  ],
+        MatCardModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatSelectModule,
+        MatTooltipModule,
+        MatIconModule,
+        RecaptchaFormsModule,
+        RecaptchaModule,
+        MatButtonModule
+    ],
   providers: [{
     provide: RECAPTCHA_SETTINGS,
     useValue: { siteKey: 'MyOwnFeedbackForm' } as RecaptchaSettings}],
