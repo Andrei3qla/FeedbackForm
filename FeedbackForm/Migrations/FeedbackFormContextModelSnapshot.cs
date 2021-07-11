@@ -7,15 +7,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FeedbackForm.Migrations
 {
-    [DbContext(typeof(FeedbackFormContext))]
-    partial class FeedbackFormContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(FeedbackContext))]
+    partial class FeedbackContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
+                .HasAnnotation("ProductVersion", "5.0.7")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("FeedbackForm.Models.Message", b =>
@@ -25,11 +25,11 @@ namespace FeedbackForm.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("MessageText")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("SubjectId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -52,6 +52,23 @@ namespace FeedbackForm.Migrations
                     b.HasKey("SubjectId");
 
                     b.ToTable("Subjects");
+
+                    b.HasData(
+                        new
+                        {
+                            SubjectId = 1,
+                            SubjectName = "Техподдержка"
+                        },
+                        new
+                        {
+                            SubjectId = 2,
+                            SubjectName = "Продажи"
+                        },
+                        new
+                        {
+                            SubjectId = 3,
+                            SubjectName = "Другое"
+                        });
                 });
 
             modelBuilder.Entity("FeedbackForm.Models.User", b =>

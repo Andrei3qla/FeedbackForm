@@ -8,9 +8,9 @@
       </mat-card-header>
 
       <mat-card-content>
-        <form id="contactform" [formGroup]="userData">
+        <form id="contactForm" [formGroup]="userData">
           <p>
-            <mat-form-field appearance="legacy" class="input-field">
+            <mat-form-field appearance="fill" class="input-field">
               <mat-label>Ваше имя</mat-label>
               <input matInput placeholder="Andrew" name="firstName" type="text" formControlName="name">
               <mat-icon matSuffix>mode_edit</mat-icon>
@@ -18,7 +18,7 @@
           </p>
 
           <p>
-            <mat-form-field appearance="legacy" class="input-field">
+            <mat-form-field appearance="fill" class="input-field">
               <mat-label>Ваш email</mat-label>
               <input matInput placeholder="yourmail@mail.com" type="email" formControlName="email">
               <mat-hint>Должен иметь вид host@mail.com</mat-hint>
@@ -27,7 +27,7 @@
           </p>
 
           <p>
-            <mat-form-field appearance="legacy" class="input-field">
+            <mat-form-field appearance="fill" class="input-field">
               <mat-label>Ваш номер телефона</mat-label>
               <input matInput prefix="+7" mask="(000)000-00-00" placeholder="+7(999)999-99-99" type="tel" formControlName="phone">
               <mat-icon matSuffix>phone</mat-icon>
@@ -35,19 +35,16 @@
           </p>
 
           <p>
-            <mat-form-field appearance="legacy" class="input-field">
+            <mat-form-field appearance="fill" class="input-field">
               <mat-label>Тема сообщения</mat-label>
               <mat-select formControlName="subject">
-                <mat-option value="Техподдержка">Техподдержка</mat-option>
-                <mat-option value="Продажи">Продажи</mat-option>
-                <mat-option value="Другое">Другое</mat-option>
-
+                <mat-option *ngFor="let subject of subjects" [value]="subject.subjectName">{{subject.subjectName}}</mat-option>
               </mat-select>
             </mat-form-field>
           </p>
 
           <p>
-            <mat-form-field appearance="legacy" class="input-field">
+            <mat-form-field appearance="fill" class="input-field">
               <mat-label>Текст сообщения</mat-label>
               <textarea matInput placeholder="Введите текст сообщения" formControlName="message"></textarea>
             </mat-form-field>
@@ -74,7 +71,7 @@
   <ng-template #elseBlock>
     <mat-card class="card">
       <mat-card-header>
-        <mat-card-title class="head-card">Полученые данные</mat-card-title>
+        <mat-card-title class="head-card">Полученные данные</mat-card-title>
       </mat-card-header>
 
       <mat-card-content >

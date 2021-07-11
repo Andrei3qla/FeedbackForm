@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using FeedbackForm.Models;
 using FeedbackForm.Data;
+using FeedbackForm.Repositories;
 
 
 namespace FeedbackForm
@@ -23,54 +24,34 @@ namespace FeedbackForm
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
-            services.AddSpaStaticFiles(configuration =>
-            {
-                configuration.RootPath = "ClientApp/dist";
-            });
-            services.AddDbContext<FeedbackFormContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("FeedbackFormContext")));
+            services.AddCors(); // Make sure you call this previous to AddMvc
+            services.AddControllers();
+
+            services.AddDbContext<FeedbackContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("FeedbackFormContext")));
+
+            services.AddScoped<MainRepository>();
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, FeedbackContext context)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Error");
-            }
-
-            app.UseStaticFiles();
-            if (!env.IsDevelopment())
-            {
-                app.UseSpaStaticFiles();
-            }
-
+            context.Database.Migrate();
+            app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            
             app.UseRouting();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller}/{action=Index}/{id?}");
+                endpoints.MapControllers();
             });
-
-
+            app.UseStaticFiles();
+            
             app.UseSpa(spa =>
             {
-                    // To learn more about options for serving an Angular SPA from ASP.NET Core,
-                    // see https://go.microsoft.com/fwlink/?linkid=864501
-
                 spa.Options.SourcePath = "ClientApp";
-
                 if (env.IsDevelopment())
                 {
                     spa.UseAngularCliServer(npmScript: "start");
                 }
-
-
             });
         }
     }

@@ -1,58 +1,70 @@
-import { Component, Inject } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
-import { Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import {Component, Inject} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from "rxjs";
+
+interface Subject {
+  subjectId: number;
+  subjectName: string;
+}
+
+class FeedbackRequest {
+  public id: number;
+  name: string;
+  email: string;
+  phone: string;
+  subjectId: number;
+  message: string;
+}
+
 @Component({
   selector: 'app-form',
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.css']
 })
 
-
 export class FormComponent {
+
+  constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
+    this.url = 'http://localhost:5000/feedback';
+    this.sharedKey = '6Ld_KtcUAAAAAOQgrVYPNFTUl0uYyyYI8HJeXk13';
+    this.captchaURL = 'https://www.google.com/recaptcha/api/siteverify';
+    const observable = this.getSubjects();
+    observable.subscribe(subs => this.subjects = subs);
+  }
 
   userData = new FormGroup({
     email: new FormControl('', [
       Validators.required,
-      Validators.pattern("^[a-z0-9._%+-]+\@+[a-z0-9.-]+\.[a-z]{2,4}$")]),
+      Validators.pattern('^[a-z0-9._%+-]+\@+[a-z0-9.-]+\.[a-z]{2,4}$')]),
     name: new FormControl('', [
       Validators.required,
-      Validators.pattern("^[А-яа-яA-za-z ]{3,}$")]),
+      Validators.pattern('^[А-яа-яA-za-z ]{3,}$')]),
     phone: new FormControl('', [
       Validators.required,
-      Validators.pattern("^[0-9]{10}$")]),
+      Validators.pattern('^[0-9]{10}$')]),
     subject: new FormControl('', [
       Validators.required]),
     message: new FormControl('', [
       Validators.required]),
     recaptcha: new FormControl('', [
-      Validators.required ])
+      Validators.required])
   });
 
-  constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
-    this.url = baseUrl;
-    this.sharedKey = "6Ld_KtcUAAAAAOQgrVYPNFTUl0uYyyYI8HJeXk13";
-    this.captchaURL = "https://www.google.com/recaptcha/api/siteverify";
-  }
-
-  posted: boolean = false;
-  clicked: boolean = false;
+  posted = false;
+  clicked = false;
   url: string;
   retained: object;
-  sharedKey : string;
-  captchaURL : string;
+  sharedKey: string;
+  captchaURL: string;
+  subjects: Subject[];
+
+  getSubjects(): Observable<Subject[]> {
+    console.log(`clicked!`);
+    return this.http.get<Subject[]>(this.url + `/subjects`);
+  }
 
   resolved(captchaResponse: string) {
-
-    //console.log(`Resolved captcha with response: ${captchaResponse}`);
-    //const captchaRequest = {
-    //  secret: this.sharedKey,
-    //  response: captchaResponse
-    //}
-    //this.http.post(this.captchaURL, captchaRequest)
-    //  .subscribe((data) => {
-    //    console.log(data);
-    //  });
 
   }
 
@@ -62,21 +74,20 @@ export class FormComponent {
 
   public press(): void {
     this.clicked = true;
-    const body = {
-      id: 0,
-      name: this.userData.get('name').value,
-      email: this.userData.get('email').value,
-      phone: this.userData.get('phone').value,
-      subject: this.userData.get('subject').value,
-      message: this.userData.get('message').value
-    }
+    let body = new FeedbackRequest();
+    body.name = this.userData.get('name').value;
+    body.email = this.userData.get('email').value;
+    body.phone = this.userData.get('phone').value;
+    body.subjectId = this.subjects.find(s => s.subjectName == this.userData.get('subject').value).subjectId;
+    body.message = this.userData.get('message').value;
 
-    this.http.post(this.url + 'userdatas',body)
+
+    this.http.post(this.url, body)
       .subscribe((data) => {
         this.retained = data;
         this.posted = true;
         return data;
-      })
+      });
   }
 
 }
