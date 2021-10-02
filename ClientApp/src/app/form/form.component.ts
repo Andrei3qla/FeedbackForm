@@ -2,6 +2,7 @@ import {Component, Inject} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from "rxjs";
+import {environment} from "../../environments/environment";
 
 interface Subject {
   subjectId: number;
@@ -26,7 +27,7 @@ class FeedbackRequest {
 export class FormComponent {
 
   constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
-    this.url = 'http://localhost:5000/feedback';
+    this.url = environment.apiUrl;
     this.sharedKey = '6Ld_KtcUAAAAAOQgrVYPNFTUl0uYyyYI8HJeXk13';
     this.captchaURL = 'https://www.google.com/recaptcha/api/siteverify';
     const observable = this.getSubjects();

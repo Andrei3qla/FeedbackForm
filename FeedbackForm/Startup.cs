@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
@@ -28,7 +29,8 @@ namespace FeedbackForm
             services.AddControllers();
 
             services.AddDbContext<FeedbackContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("FeedbackFormContext")));
+                options.UseMySql(Configuration.GetConnectionString("FeedbackFormContext"),
+                    new MySqlServerVersion(new Version(5, 7))));
 
             services.AddScoped<MainRepository>();
         }
@@ -44,15 +46,15 @@ namespace FeedbackForm
                 endpoints.MapControllers();
             });
             app.UseStaticFiles();
-            
-            app.UseSpa(spa =>
+
+            if (env.IsDevelopment())
             {
-                spa.Options.SourcePath = "ClientApp";
-                if (env.IsDevelopment())
+                app.UseSpa(spa =>
                 {
+                    spa.Options.SourcePath = "../ClientApp";
                     spa.UseAngularCliServer(npmScript: "start");
-                }
-            });
+                });
+            }
         }
     }
 }
